@@ -17,7 +17,7 @@ const ercAbi = [
 const WETH_ADDRESS = "0x20b28B1e4665FFf290650586ad76E977EAb90c5D";
 const DAI_ADDRESS = "0x3e7676937A7E96CFB7616f255b9AD9FF47363D4b";
 const DAI_DECIMALS = 18;
-const POOL_ADDRESS = "0x6fbBb02D8F8a1f0d040700161E8187614F371AB8"; // ETH/DAI
+const POOL_ADDRESS = "0xe52940eDDa6ec5FDabef7C33B9C1E1d613BbA144"; // ETH/DAI
 const VAULT_CONTRACT_ADDRESS = "0x4Ff94F499E1E69D687f3C3cE2CE93E717a0769F8";
 const ROUTER_ADDRESS = "0xB3b7fCbb8Db37bC6f572634299A58f51622A847e";
 const POOLFACTORY_ADDRESS = "0xf2FD2bc2fBC12842aAb6FbB8b1159a6a83E72006"; // Classic
@@ -54,7 +54,7 @@ async function main() {
   // 0 - vault internal transfer
   // 1 - withdraw and unwrap to naitve ETH
   // 2 - withdraw and wrap to wETH
-  const withdrawMode = 0; // 1 or 2 to withdraw to user's wallet
+  const withdrawMode = 2; // 1 or 2 to withdraw to user's wallet
 
   const swapData = ethers.utils.defaultAbiCoder.encode(
     ["address", "address", "uint8"],
@@ -93,11 +93,12 @@ async function main() {
     Math.floor(Date.now() / 1000) + 60 * 10, // deadline // 10 minutes
     {
       value: value,
-      gasLimit: 500000,
     }
   );
 
-  await response.wait();
+  tx_receipt = await response.wait();
+
+  console.log("receipt: ", tx_receipt);
 
   await checkBalances();
   /*  const deposit = await WETH.deposit({
